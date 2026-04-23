@@ -2,7 +2,7 @@
   "name": "shrew-browser",
   "version": "1.0.0",
   "productName": "Shrew",
-  "description": "the Shrew browser - go down the rabbit hole",
+  "description": "the Shrew browser - quick, clever, and always one step ahead",
   "main": "main.js",
   "scripts": {
     "start": "electron .",

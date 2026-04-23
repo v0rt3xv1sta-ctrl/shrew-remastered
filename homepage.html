@@ -12,38 +12,32 @@
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            color: white;
+            background: #4a4a4a;
+            font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #e0e0e0;
             height: 100vh;
+            margin: 0;
+            padding: 20px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
         }
 
         .logo-container {
             margin-bottom: 40px;
-            animation: float 3s ease-in-out infinite;
         }
 
         .logo {
             width: 200px;
             height: auto;
-            filter: drop-shadow(0 10px 30px rgba(255, 215, 0, 0.3));
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            opacity: 0.8;
         }
 
         .tagline {
-            font-size: 16px;
-            color: #888;
+            font-size: 14px;
+            color: #b0b0b0;
             margin-bottom: 30px;
-            font-style: italic;
+            font-style: normal;
         }
 
         .search-container {
@@ -54,116 +48,159 @@
 
         .search-box {
             width: 100%;
-            padding: 18px 25px;
-            font-size: 16px;
-            border: 2px solid #444;
+            padding: 12px 16px;
+            font-size: 14px;
+            border: 1px solid #666;
             border-radius: 0px;
-            background: rgba(30, 30, 30, 0.8);
-            color: white;
+            background: #3a3a3a;
+            color: #e0e0e0;
             outline: none;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
         }
 
         .search-box:focus {
-            border-color: #ff69b4;
-            box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+            border-color: #7a7a7a;
+            box-shadow: 0 0 0 1px #7a7a7a;
         }
 
         .search-box::placeholder {
-            color: #666;
-        }
-
-        .quick-links {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 20px;
-            max-width: 800px;
-            padding: 0 20px;
-        }
-
-        .link-card {
-            background: rgba(40, 40, 40, 0.6);
-            padding: 20px;
-            border-radius: 0px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-            backdrop-filter: blur(10px);
-        }
-
-        .link-card:hover {
-            background: rgba(50, 50, 50, 0.8);
-            border-color: #ff69b4;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.2);
+            color: #999;
         }
 
         .link-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
+            font-size: 18px;
+            min-width: 20px;
         }
 
         .link-name {
-            font-size: 14px;
-            color: #ccc;
+            font-size: 13px;
+            color: #e0e0e0;
+            font-weight: normal;
         }
 
         .brainrot-quote {
-            position: absolute;
+            position: fixed;
             bottom: 20px;
-            font-size: 12px;
-            color: #555;
+            right: 20px;
+            font-size: 11px;
+            color: #888;
             font-style: italic;
+            max-width: 300px;
+            text-align: right;
+        }
+
+        .main-container {
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            background: #3a3a3a;
+            border: 1px solid #666;
+            border-radius: 0px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            color: #c0c0c0;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .link-item {
+            background: #5a5a5a;
+            padding: 14px 16px;
+            border-radius: 0px;
+            cursor: pointer;
+            border: 1px solid #777;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            transition: all 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .link-item:hover {
+            background: #6a6a6a;
+            border-color: #888;
+            transform: translateX(2px);
         }
     </style>
 </head>
 <body>
-<div class="logo-container">
-    <img src="Untitled.png" alt="Shrew Logo" class="logo">
+<div class="main-container">
+    <div class="left-panel">
+        <div class="logo-container">
+            <img src="Untitled.png" alt="Shrew Logo" class="logo">
+        </div>
+
+        <div class="tagline">quick as a shrew 🕳️</div>
+
+        <div class="search-container">
+            <input
+                type="text"
+                class="search-box"
+                id="searchInput"
+                placeholder="search the web..."
+                autofocus
+            >
+        </div>
+    </div>
+
+    <div class="right-panel">
+        <div class="panel-title">Quick Access</div>
+        <div class="link-list">
+            <div class="link-item" onclick="navigate('https://youtube.com')">
+                <span class="link-icon">📺</span>
+                <span class="link-name">YouTube</span>
+            </div>
+            <div class="link-item" onclick="navigate('https://discord.com')">
+                <span class="link-icon">💬</span>
+                <span class="link-name">Discord</span>
+            </div>
+            <div class="link-item" onclick="navigate('https://github.com')">
+                <span class="link-icon">💻</span>
+                <span class="link-name">GitHub</span>
+            </div>
+            <div class="link-item" onclick="navigate('https://reddit.com')">
+                <span class="link-icon">🗨️</span>
+                <span class="link-name">Reddit</span>
+            </div>
+            <div class="link-item" onclick="navigate('https://twitter.com')">
+                <span class="link-icon">🐦</span>
+                <span class="link-name">Twitter</span>
+            </div>
+            <div class="link-item" onclick="navigate('https://twitch.tv')">
+                <span class="link-icon">🎮</span>
+                <span class="link-name">Twitch</span>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="tagline">down the Shrew we go 🕳️</div>
-
-<div class="search-container">
-    <input
-            type="text"
-            class="search-box"
-            id="searchInput"
-            placeholder="search the hole..."
-            autofocus
-    >
-</div>
-
-<div class="quick-links">
-    <div class="link-card" onclick="navigate('https://youtube.com')">
-        <div class="link-icon">📺</div>
-        <div class="link-name">YouTube</div>
-    </div>
-    <div class="link-card" onclick="navigate('https://discord.com')">
-        <div class="link-icon">💬</div>
-        <div class="link-name">Discord</div>
-    </div>
-    <div class="link-card" onclick="navigate('https://github.com')">
-        <div class="link-icon">💻</div>
-        <div class="link-name">GitHub</div>
-    </div>
-    <div class="link-card" onclick="navigate('https://reddit.com')">
-        <div class="link-icon">🗨️</div>
-        <div class="link-name">Reddit</div>
-    </div>
-    <div class="link-card" onclick="navigate('https://twitter.com')">
-        <div class="link-icon">🐦</div>
-        <div class="link-name">Twitter</div>
-    </div>
-    <div class="link-card" onclick="navigate('https://twitch.tv')">
-        <div class="link-icon">🎮</div>
-        <div class="link-name">Twitch</div>
-    </div>
-</div>
-
-<div class="brainrot-quote">"not all who wander are lost, some are just in Shrew" - someone probably</div>
+<div class="brainrot-quote">"small in size, mighty in spirit - the shrew way" - ancient shrew wisdom</div>
 
 <script>
     const searchInput = document.getElementById('searchInput');

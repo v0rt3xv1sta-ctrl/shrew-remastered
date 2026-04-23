@@ -1,13 +1,13 @@
 # Shrew Browser
 
-A custom Chromium-based browser built with Electron by mrrat and Gravity.
+A custom Chromium-based browser built with Electron by mrrat and Gravity. Quick, clever, and always one step ahead - just like a shrew!
 
 ![Shrew Logo](Untitled.png)
 
 ## ✨ Features
 
 ### Core Browser
-- **Custom Homepage** - Shrew themed with quick links and search
+- **Custom Homepage** - Shrew-themed with quick links and search
 - **Smart Search** - DuckDuckGo web scraping with malware blocking
 - **Wikipedia Integration** - Automatic summaries with images
 - **Navigation Controls** - Back, forward, reload buttons
@@ -158,6 +158,6 @@ Found a bug? Have a feature request?
 
 ---
 
-**"not all who wander are lost, some are just in Shrew"** - someone probably
+**"small in size, mighty in spirit - the shrew way"** - ancient shrew wisdom
 
 ️ Welcome to Shrew
