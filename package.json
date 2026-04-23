@@ -15,8 +15,8 @@
     "chromium",
     "electron"
   ],
-  "author": "mrrat",
-  "license": "MIT",
+  "author": "gravity",
+  "license": "GPL-2.0-only",
   "devDependencies": {
     "electron": "^28.3.3",
     "electron-builder": "^26.8.1"
