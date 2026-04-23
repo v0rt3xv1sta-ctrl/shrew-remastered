@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rat Hole</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-container {
+            margin-bottom: 40px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .logo {
+            width: 200px;
+            height: auto;
+            filter: drop-shadow(0 10px 30px rgba(255, 215, 0, 0.3));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .tagline {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .search-container {
+            width: 600px;
+            max-width: 90%;
+            margin-bottom: 40px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 18px 25px;
+            font-size: 16px;
+            border: 2px solid #444;
+            border-radius: 50px;
+            background: rgba(30, 30, 30, 0.8);
+            color: white;
+            outline: none;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-box:focus {
+            border-color: #ff69b4;
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+        }
+
+        .search-box::placeholder {
+            color: #666;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .link-card {
+            background: rgba(40, 40, 40, 0.6);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            backdrop-filter: blur(10px);
+        }
+
+        .link-card:hover {
+            background: rgba(50, 50, 50, 0.8);
+            border-color: #ff69b4;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.2);
+        }
+
+        .link-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .link-name {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .brainrot-quote {
+            position: absolute;
+            bottom: 20px;
+            font-size: 12px;
+            color: #555;
+            font-style: italic;
+        }
+
+        .cheese-bg {
+            position: absolute;
+            font-size: 100px;
+            opacity: 0.03;
+            z-index: -1;
+            animation: drift 20s infinite linear;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(100px, 100px) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+<div class="cheese-bg" style="top: 10%; left: 10%;">🧀</div>
+<div class="cheese-bg" style="top: 60%; right: 15%;">🐀</div>
+<div class="cheese-bg" style="bottom: 20%; left: 70%;">🧀</div>
+
+<div class="logo-container">
+    <img src="rathole-logo.png" alt="Rat Hole" class="logo">
+</div>
+
+<div class="tagline">down the rat hole we go 🐀🕳️</div>
+
+<div class="search-container">
+    <input
+            type="text"
+            class="search-box"
+            id="searchInput"
+            placeholder="search the hole..."
+            autofocus
+    >
+</div>
+
+<div class="quick-links">
+    <div class="link-card" onclick="navigate('https://youtube.com')">
+        <div class="link-icon">📺</div>
+        <div class="link-name">YouTube</div>
+    </div>
+    <div class="link-card" onclick="navigate('https://discord.com')">
+        <div class="link-icon">💬</div>
+        <div class="link-name">Discord</div>
+    </div>
+    <div class="link-card" onclick="navigate('https://github.com')">
+        <div class="link-icon">💻</div>
+        <div class="link-name">GitHub</div>
+    </div>
+    <div class="link-card" onclick="navigate('https://reddit.com')">
+        <div class="link-icon">🗨️</div>
+        <div class="link-name">Reddit</div>
+    </div>
+    <div class="link-card" onclick="navigate('https://twitter.com')">
+        <div class="link-icon">🐦</div>
+        <div class="link-name">Twitter</div>
+    </div>
+    <div class="link-card" onclick="navigate('https://twitch.tv')">
+        <div class="link-icon">🎮</div>
+        <div class="link-name">Twitch</div>
+    </div>
+</div>
+
+<div class="brainrot-quote">"not all who wander are lost, some are just in the rat hole" - someone probably</div>
+
+<script>
+    const searchInput = document.getElementById('searchInput');
+
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const query = searchInput.value.trim();
+            if (query) {
+                // Check if it's a URL
+                if (query.includes('.') && !query.includes(' ')) {
+                    const url = query.startsWith('http') ? query : 'https://' + query;
+                    window.location.href = url;
+                } else {
+                    // Use custom Rat Hole search
+                    window.location.href = 'search.html?q=' + encodeURIComponent(query);
+                }
+            }
+        }
+    });
+
+    function navigate(url) {
+        window.location.href = url;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rat Hole Browser</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+          font-family: system-ui;
+          background: #1a1a1a;
+          color: white;
+        }
+
+        .toolbar {
+          background: #252525;
+          padding: 10px;
+          display: flex;
+          gap: 10px;
+          border-bottom: 1px solid #333;
+        }
+
+        button {
+          background: #333;
+          color: white;
+          border: none;
+          padding: 8px 15px;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+
+        button:hover { background: #444; }
+
+        #urlbar {
+          flex: 1;
+          background: #333;
+          color: white;
+          border: none;
+          padding: 8px 15px;
+          border-radius: 5px;
+          font-size: 14px;
+        }
+
+        webview {
+          width: 100%;
+          height: calc(100vh - 50px);
+        }
+    </style>
+</head>
+<body>
+<div class="toolbar">
+    <button onclick="goBack()">←</button>
+    <button onclick="goForward()">→</button>
+    <button onclick="reload()">⟳</button>
+    <input type="text" id="urlbar" placeholder="type url..." />
+    <button onclick="navigate()">Go</button>
+</div>
+
+<webview id="browser" src="homepage.html"></webview>
+
+<script>
+    const webview = document.getElementById('browser');
+    const urlbar = document.getElementById('urlbar');
+    let isReady = false;
+
+    // Wait for webview to be ready
+    webview.addEventListener('dom-ready', () => {
+      isReady = true;
+      console.log('Webview ready!');
+    });
+
+    // update url bar when page changes
+    webview.addEventListener('did-navigate', (e) => {
+      console.log('Navigated to:', e.url);
+      // If it's the homepage, keep URL bar blank
+      if (e.url.includes('homepage.html')) {
+        urlbar.value = '';
+      } else {
+        urlbar.value = e.url;
+      }
+    });
+
+    webview.addEventListener('did-navigate-in-page', (e) => {
+      // If it's the homepage, keep URL bar blank
+      if (e.url.includes('homepage.html')) {
+        urlbar.value = '';
+      } else {
+        urlbar.value = e.url;
+      }
+    });
+
+    function navigate() {
+      let input = urlbar.value.trim();
+      console.log('Navigate called with:', input);
+
+      // If blank, go to homepage
+      if (!input) {
+        console.log('Going to homepage');
+        webview.loadURL('homepage.html');
+        return;
+      }
+
+      // Detect if it's a URL or a search query
+      const isURL = input.includes('.') && !input.includes(' ') &&
+                    (input.startsWith('http://') || input.startsWith('https://') ||
+                     /\w+\.\w{2,}/.test(input));
+
+      if (isURL) {
+        // It's a URL - navigate to it
+        let url = input;
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+          url = 'https://' + url;
+        }
+        console.log('Loading URL:', url);
+        webview.loadURL(url);
+      } else {
+        // It's a search query - go to search page
+        console.log('Searching for:', input);
+        webview.loadURL(`search.html?q=${encodeURIComponent(input)}`);
+      }
+    }
+
+    function goBack() {
+      if (webview.canGoBack()) {
+        webview.goBack();
+      }
+    }
+
+    function goForward() {
+      if (webview.canGoForward()) {
+        webview.goForward();
+      }
+    }
+
+    function reload() {
+      webview.reload();
+    }
+
+    // press enter to navigate
+    urlbar.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        navigate();
+      }
+    });
+</script>
+</body>
+</html>

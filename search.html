@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rat Hole Search</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: white;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .search-header {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-small {
+            width: 40px;
+            height: 40px;
+        }
+
+        .search-box {
+            flex: 1;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #444;
+            border-radius: 25px;
+            background: rgba(30, 30, 30, 0.8);
+            color: white;
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: #ff69b4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .ai-summary {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.1) 0%, rgba(138, 43, 226, 0.1) 100%);
+            border: 2px solid rgba(255, 105, 180, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .ai-summary-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #ff69b4;
+            font-weight: bold;
+        }
+
+        .ai-summary-content {
+            line-height: 1.6;
+            color: #ddd;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .spinner {
+            border: 3px solid #333;
+            border-top: 3px solid #ff69b4;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result {
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .result:hover {
+            background: rgba(40, 40, 40, 0.8);
+            border-color: #ff69b4;
+            transform: translateX(5px);
+        }
+
+        .result-title {
+            font-size: 18px;
+            color: #88ccff;
+            margin-bottom: 8px;
+        }
+
+        .result-url {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .result-description {
+            font-size: 14px;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .warning {
+            background: rgba(255, 69, 0, 0.2);
+            border: 2px solid rgba(255, 69, 0, 0.5);
+            color: #ff6347;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .warning-icon {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="search-header">
+    <img src="rathole-logo.png" alt="Rat Hole" class="logo-small">
+    <input type="text" class="search-box" id="searchInput" placeholder="Search the rat hole...">
+</div>
+
+<div class="container">
+    <div id="content">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Searching the rat hole...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ADD YOUR BRAVE API KEY HERE AFTER YOU GET IT
+    const BRAVE_API_KEY = 'YOUR_BRAVE_API_KEY_HERE';
+
+    // Malicious domain patterns and known bad sites
+    const maliciousPatterns = [
+        /\b(free|download|crack|keygen|torrent|hack|cheat)\.(ru|cn|tk|ml|ga|cf|gq)\b/i,
+        /\b(virus|malware|phishing|scam|fake)\b/i,
+        /\.(exe|scr|bat|cmd|vbs|js)$/i,
+        /rapidshare|megaupload|4shared/i,
+    ];
+
+    const suspiciousTLDs = ['.tk', '.ml', '.ga', '.cf', '.gq', '.cc', '.ws'];
+
+    function isSuspiciousURL(url) {
+        // Check against known patterns
+        for (const pattern of maliciousPatterns) {
+            if (pattern.test(url)) return true;
+        }
+
+        // Check suspicious TLDs
+        for (const tld of suspiciousTLDs) {
+            if (url.includes(tld)) return true;
+        }
+
+        return false;
+    }
+
+    async function performSearch(query) {
+        const content = document.getElementById('content');
+
+        try {
+            // Fetch from Wikipedia API for main summary
+            const wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
+            const wikiResponse = await fetch(wikiUrl);
+            const wikiData = await wikiResponse.json();
+
+            let summaryHTML = '';
+
+            if (wikiData.extract) {
+                summaryHTML = `
+                    <div class="ai-summary">
+                        <div class="ai-summary-title">
+                            🐀 What we found about "${query}"
+                        </div>
+                        ${wikiData.thumbnail ? `
+                            <img src="${wikiData.thumbnail.source}"
+                                 style="float: right; max-width: 200px; border-radius: 10px; margin-left: 15px;"
+                                 alt="${query}">
+                        ` : ''}
+                        <div class="ai-summary-content">
+                            <strong>${wikiData.title || query}</strong><br><br>
+                            ${wikiData.extract}
+                            ${wikiData.content_urls ? `
+                                <br><br>
+                                <a href="${wikiData.content_urls.desktop.page}"
+                                   style="color: #88ccff; text-decoration: none;">
+                                   → Read more on Wikipedia
+                                </a>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            } else {
+                summaryHTML = `
+                    <div class="ai-summary">
+                        <div class="ai-summary-title">
+                            🐀 Searching the web for "${query}"
+                        </div>
+                        <div class="ai-summary-content">
+                            Finding websites related to ${query}...
+                        </div>
+                    </div>
+                `;
+            }
+
+            let html = summaryHTML;
+
+            // EASTER EGG: rcked always at the top
+            if (query.toLowerCase() === 'rcked') {
+                html += `
+                    <div class="result" onclick="window.location.href='https://rcked.pages.dev'" style="border: 2px solid #ff69b4; background: rgba(255, 105, 180, 0.1);">
+                        <div class="result-title">🐀 rcked - The Official Site</div>
+                        <div class="result-url">https://rcked.pages.dev</div>
+                        <div class="result-description">3D multiplayer social hangout game built by mrrat and Gravity. Welcome to the rat hole! 🎮</div>
+                    </div>
+                `;
+            }
+
+            // Fetch from Brave Search API if key is set
+            if (BRAVE_API_KEY && BRAVE_API_KEY !== 'YOUR_BRAVE_API_KEY_HERE') {
+                try {
+                    const braveUrl = `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}&count=10`;
+                    const braveResponse = await fetch(braveUrl, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Subscription-Token': BRAVE_API_KEY
+                        }
+                    });
+
+                    if (braveResponse.ok) {
+                        const braveData = await braveResponse.json();
+
+                        // Display Brave search results
+                        if (braveData.web && braveData.web.results) {
+                            for (const result of braveData.web.results) {
+                                const isSus = isSuspiciousURL(result.url);
+
+                                if (isSus) {
+                                    html += `
+                                        <div class="warning">
+                                            <span class="warning-icon">⚠️</span>
+                                            Blocked suspicious website: ${result.url} (potential virus/malware)
+                                        </div>
+                                    `;
+                                } else {
+                                    html += `
+                                        <div class="result" onclick="window.location.href='${result.url}'">
+                                            <div class="result-title">${result.title}</div>
+                                            <div class="result-url">${result.url}</div>
+                                            <div class="result-description">${result.description || 'No description available'}</div>
+                                        </div>
+                                    `;
+                                }
+                            }
+                        }
+                    }
+                } catch (braveError) {
+                    console.error('Brave search error:', braveError);
+                }
+            }
+
+            // Scrape DuckDuckGo HTML for real web results
+            try {
+                const ddgHtmlUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+                const ddgResponse = await fetch(ddgHtmlUrl);
+                const ddgHtml = await ddgResponse.text();
+
+                // Parse HTML to extract results
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(ddgHtml, 'text/html');
+                const resultDivs = doc.querySelectorAll('.result');
+
+                for (let i = 0; i < Math.min(10, resultDivs.length); i++) {
+                    const resultDiv = resultDivs[i];
+                    const titleLink = resultDiv.querySelector('.result__a');
+                    const snippetDiv = resultDiv.querySelector('.result__snippet');
+
+                    if (titleLink) {
+                        const title = titleLink.textContent.trim();
+                        let url = titleLink.href;
+
+                        // DuckDuckGo uses redirect URLs, extract actual URL
+                        if (url.includes('://duckduckgo.com/l/?')) {
+                            const urlMatch = url.match(/uddg=([^&]+)/);
+                            if (urlMatch) {
+                                url = decodeURIComponent(urlMatch[1]);
+                            }
+                        }
+
+                        const description = snippetDiv ? snippetDiv.textContent.trim() : '';
+                        const isSus = isSuspiciousURL(url);
+
+                        if (isSus) {
+                            html += `
+                                <div class="warning">
+                                    <span class="warning-icon">⚠️</span>
+                                    Blocked suspicious website: ${url} (potential virus/malware)
+                                </div>
+                            `;
+                        } else if (url && title) {
+                            html += `
+                                <div class="result" onclick="window.location.href='${url}'">
+                                    <div class="result-title">${title}</div>
+                                    <div class="result-url">${url}</div>
+                                    <div class="result-description">${description}</div>
+                                </div>
+                            `;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.log('DuckDuckGo scraping failed:', e);
+            }
+
+            // Search Wikipedia for related articles
+            const wikiSearchUrl = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(query)}&limit=5&format=json&origin=*`;
+            const wikiSearchResponse = await fetch(wikiSearchUrl);
+            const wikiSearchData = await wikiSearchResponse.json();
+
+            const titles = wikiSearchData[1] || [];
+            const descriptions = wikiSearchData[2] || [];
+            const urls = wikiSearchData[3] || [];
+
+            for (let i = 0; i < titles.length; i++) {
+                if (titles[i] && urls[i]) {
+                    const isSus = isSuspiciousURL(urls[i]);
+
+                    if (!isSus) {
+                        html += `
+                            <div class="result" onclick="window.location.href='${urls[i]}'">
+                                <div class="result-title">${titles[i]}</div>
+                                <div class="result-url">${urls[i]}</div>
+                                <div class="result-description">${descriptions[i] || 'Wikipedia article'}</div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            // Add search engine links
+            const searchLinks = [
+                {
+                    title: `"${query}" - Full Web Search`,
+                    url: `https://duckduckgo.com/?q=${encodeURIComponent(query)}`,
+                    description: `Search the entire web for ${query} on DuckDuckGo`
+                },
+                {
+                    title: `"${query}" - Google`,
+                    url: `https://www.google.com/search?q=${encodeURIComponent(query)}`,
+                    description: `Google search results for ${query}`
+                },
+                {
+                    title: `"${query}" - YouTube`,
+                    url: `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`,
+                    description: `Videos about ${query}`
+                },
+                {
+                    title: `"${query}" - GitHub`,
+                    url: `https://github.com/search?q=${encodeURIComponent(query)}`,
+                    description: `Code and projects related to ${query}`
+                }
+            ];
+
+            for (const result of searchLinks) {
+                const isSus = isSuspiciousURL(result.url);
+
+                if (!isSus) {
+                    html += `
+                        <div class="result" onclick="window.location.href='${result.url}'">
+                            <div class="result-title">${result.title}</div>
+                            <div class="result-url">${result.url}</div>
+                            <div class="result-description">${result.description}</div>
+                        </div>
+                    `;
+                }
+            }
+
+            content.innerHTML = html;
+
+        } catch (error) {
+            console.error('Search error:', error);
+
+            let html = `
+                <div class="ai-summary">
+                    <div class="ai-summary-title">
+                        🐀 Searching for "${query}"
+                    </div>
+                    <div class="ai-summary-content">
+                        Check out the search results below!
+                    </div>
+                </div>
+            `;
+
+            const fallbackResults = [
+                {
+                    title: `${query} - DuckDuckGo`,
+                    url: `https://duckduckgo.com/?q=${encodeURIComponent(query)}`,
+                    description: `Search the web for ${query}`
+                },
+                {
+                    title: `${query} - Google`,
+                    url: `https://www.google.com/search?q=${encodeURIComponent(query)}`,
+                    description: `Google results for ${query}`
+                }
+            ];
+
+            for (const result of fallbackResults) {
+                html += `
+                    <div class="result" onclick="window.location.href='${result.url}'">
+                        <div class="result-title">${result.title}</div>
+                        <div class="result-url">${result.url}</div>
+                        <div class="result-description">${result.description}</div>
+                    </div>
+                `;
+            }
+
+            content.innerHTML = html;
+        }
+    }
+
+    // Get query from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('q');
+
+    if (query) {
+        document.getElementById('searchInput').value = query;
+        performSearch(query);
+    }
+
+    // New search on enter
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const newQuery = e.target.value.trim();
+            if (newQuery) {
+                window.location.href = `search.html?q=${encodeURIComponent(newQuery)}`;
+            }
+        }
+    });
+</script>
+</body>
+</html>
