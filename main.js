@@ -7,7 +7,7 @@ function createWindow() {
     width: 1400,
     height: 900,
     title: 'Shrew',
-    icon: 'rathole-logo.png',  // Use your logo as the icon
+    icon: 'Untitled.png',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,

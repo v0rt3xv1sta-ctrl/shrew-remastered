@@ -1,8 +1,8 @@
-# 🐀 Shrew Browser
+# Shrew Browser
 
 A custom Chromium-based browser built with Electron by mrrat and Gravity.
 
-![Shrew Logo](rathole-logo.png)
+![Shrew Logo](Untitled.png)
 
 ## ✨ Features
 
@@ -20,29 +20,29 @@ A custom Chromium-based browser built with Electron by mrrat and Gravity.
 - 🌐 Quick links to Google, YouTube, Reddit, GitHub
 
 ### Easter Eggs
-- 🎮 **Rat Game** - Search "rat" to play Snake with a pixel rat eating cheese!
+- 🎮 **Snake Game** - Search "snake" to play a retro game with cheese!
   - Controls: Arrow keys or WASD
   - Tracks high score
   - Embedded in search results
 
 ### Special Features
-- 🐀 **rcked Easter Egg** - Search "rcked" for a special result
-- 🧀 Floating cheese and rat animations on homepage
+- **rcked Easter Egg** - Search "rcked" for a special result
+- Floating animations on homepage
 - 🎨 Pink and dark theme throughout
 - 💾 Persistent cookies and sessions
 
 ## 📥 Installation
 
 ### For Users
-1. Download `Shrew Setup.exe` from [Releases](https://github.com/mrratcool78/rathole/releases)
+1. Download `Shrew Setup.exe` from [Releases](https://github.com/mrratcool78/shrew/releases)
 2. Run the installer
 3. Launch Shrew from your desktop or start menu
 
 ### For Developers
 ```bash
 # Clone the repo
-git clone https://github.com/mrratcool78/rathole.git
-cd rathole
+git clone <repository-url>
+cd shrew
 
 # Install dependencies
 npm install
@@ -72,7 +72,7 @@ npm run build-win
 
 ### Easter Eggs
 Try searching for these:
-- **"rat"** - Play the Shrew Snake game!
+- **"snake"** - Play the Shrew Snake game!
 - **"rcked"** - Special shoutout to rcked.pages.dev
 
 ## 🛡️ Security Features
@@ -100,14 +100,13 @@ Automatically blocks:
 
 ### Project Structure
 ```
-rat-hole/
+shrew/
 ├── main.js           # Electron main process
 ├── index.html        # Browser UI
 ├── homepage.html     # Custom homepage
 ├── search.html       # Search results page
-├── rat-game.html     # Snake game (standalone)
-├── rathole-logo.png  # Browser icon
-└── package.json      # Dependencies
+├── Untitled.png      # Browser logo
+├── package.json      # Dependencies
 ```
 
 ## 🎨 Customization
@@ -161,4 +160,4 @@ Found a bug? Have a feature request?
 
 **"not all who wander are lost, some are just in Shrew"** - someone probably
 
-🐀🕳️ Welcome to Shrew
+️ Welcome to Shrew

@@ -1,8 +1,8 @@
 {
-  "name": "rat-hole",
+  "name": "shrew-browser",
   "version": "1.0.0",
-  "productName": "Rat Hole",
-  "description": "the rat hole browser - go down the rabbit hole (rat hole)",
+  "productName": "Shrew",
+  "description": "the Shrew browser - go down the rabbit hole",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -13,8 +13,7 @@
   "keywords": [
     "browser",
     "chromium",
-    "electron",
-    "rat"
+    "electron"
   ],
   "author": "mrrat",
   "license": "MIT",
@@ -23,13 +22,13 @@
     "electron-builder": "^26.8.1"
   },
   "build": {
-    "appId": "com.mrrat.rathole",
-    "productName": "Rat Hole",
+    "appId": "com.mrrat.shrew",
+    "productName": "Shrew",
     "win": {
       "target": [
         "nsis"
       ],
-      "icon": "rathole-logo.png"
+      "icon": "Untitled.png"
     },
     "files": [
       "**/*",

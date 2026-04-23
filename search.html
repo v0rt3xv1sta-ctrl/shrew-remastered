@@ -148,7 +148,7 @@
 </head>
 <body>
 <div class="search-header">
-    <img src="rathole-logo.png" alt="Shrew" class="logo-small">
+    <img src="Untitled.png" alt="Shrew Logo" class="logo-small">
     <input type="text" class="search-box" id="searchInput" placeholder="Search Shrew...">
 </div>
 
@@ -204,7 +204,7 @@
                 summaryHTML = `
                     <div class="ai-summary">
                         <div class="ai-summary-title">
-                            🐀 What we found about "${query}"
+                            What we found about "${query}"
                         </div>
                         ${wikiData.thumbnail ? `
                             <img src="${wikiData.thumbnail.source}"
@@ -228,7 +228,7 @@
                 summaryHTML = `
                     <div class="ai-summary">
                         <div class="ai-summary-title">
-                            🐀 Searching the web for "${query}"
+                            Searching the web for "${query}"
                         </div>
                         <div class="ai-summary-content">
                             Finding websites related to ${query}...
@@ -243,7 +243,7 @@
             if (query.toLowerCase() === 'rcked') {
                 html += `
                     <div class="result" onclick="window.location.href='https://rcked.pages.dev'" style="border: 2px solid #ff69b4; background: rgba(255, 105, 180, 0.1);">
-                        <div class="result-title">🐀 rcked - The Official Site</div>
+                        <div class="result-title">rcked - The Official Site</div>
                         <div class="result-url">https://rcked.pages.dev</div>
                         <div class="result-description">3D multiplayer social hangout game built by mrrat and Gravity. Welcome to Shrew! 🎮</div>
                     </div>
@@ -417,7 +417,7 @@
             let html = `
                 <div class="ai-summary">
                     <div class="ai-summary-title">
-                        🐀 Searching for "${query}"
+                        Searching for "${query}"
                     </div>
                     <div class="ai-summary-content">
                         Check out the search results below!
