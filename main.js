@@ -10,7 +10,12 @@ const CHROME_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 
 app.userAgentFallback = CHROME_UA;
 
 // Nuke the "Electron" signature from any command-line hints too.
-app.commandLine.appendSwitch('disable-features', 'IsolateOrigins,site-per-process');
+app.commandLine.appendSwitch('disable-features', 'IsolateOrigins,site-per-process,AutomationControlled');
+// THE big one — Google's signin blocks anything with AutomationControlled
+// in blink features. Disabling it at the blink level is the known fix.
+app.commandLine.appendSwitch('disable-blink-features', 'AutomationControlled');
+// Stop Electron from advertising itself in enabled features.
+app.commandLine.appendSwitch('enable-features', 'NetworkService,NetworkServiceInProcess');
 
 function createWindow() {
   mainWindow = new BrowserWindow({

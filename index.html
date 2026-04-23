@@ -157,6 +157,7 @@
     <button onclick="reload()">⟳</button>
     <input type="text" id="urlbar" placeholder="type url..." />
     <button onclick="navigate()">Go</button>
+    <button onclick="openExternal()" title="Open current page in system browser">⇱</button>
 </div>
 
 <div id="webview-container"></div>
@@ -334,6 +335,17 @@
     function reload() {
       const webview = getActiveWebview();
       if (webview) webview.reload();
+    }
+
+    // Fallback for google's stubborn signin — pop the current URL open
+    // in the system's default browser. Click ⇱ while on accounts.google.com
+    // if shrew still gets blocked.
+    function openExternal() {
+      const webview = getActiveWebview();
+      if (!webview) return;
+      const url = webview.getURL();
+      if (!url) return;
+      require('electron').shell.openExternal(url);
     }
 
     urlbar.addEventListener('keypress', (e) => {
