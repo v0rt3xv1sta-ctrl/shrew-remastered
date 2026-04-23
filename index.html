@@ -167,6 +167,11 @@
     const newTabBtn = document.getElementById('newtab');
     const webviewContainer = document.getElementById('webview-container');
 
+    // Absolute file:// URL to preload.js so the webview tag accepts it.
+    const path = require('path');
+    const { pathToFileURL } = require('url');
+    const PRELOAD_URL = pathToFileURL(path.join(__dirname, 'preload.js')).toString();
+
     let tabs = [];
     let activeTabId = null;
     let nextTabId = 1;
@@ -187,11 +192,12 @@
       const webview = document.createElement('webview');
       webview.id = 'browser-' + id;
       webview.setAttribute('src', url || 'homepage.html');
-      webview.setAttribute('webpreferences', 'webSecurity=no,nodeIntegration=no,contextIsolation=yes');
+      webview.setAttribute('webpreferences', 'webSecurity=no,nodeIntegration=no,contextIsolation=no');
       webview.setAttribute('useragent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36');
       webview.setAttribute('allowpopups', '');
       webview.setAttribute('disablewebsecurity', '');
       webview.setAttribute('partition', 'persist:shrew');
+      webview.setAttribute('preload', PRELOAD_URL);
       webviewContainer.appendChild(webview);
 
       const tabEl = document.createElement('div');
