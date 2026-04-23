@@ -114,4 +114,49 @@
       });
     }
   } catch (_) {}
+
+  // 8. navigator.userAgentData — the new-school UA-CH API. Must match
+  //    the UA string or Google flags the mismatch. Spoofing as Edge.
+  try {
+    const uaDataBrands = [
+      { brand: 'Chromium', version: '133' },
+      { brand: 'Not(A:Brand', version: '24' },
+      { brand: 'Microsoft Edge', version: '133' },
+    ];
+    const fullVersionList = [
+      { brand: 'Chromium', version: '133.0.6943.127' },
+      { brand: 'Not(A:Brand', version: '24.0.0.0' },
+      { brand: 'Microsoft Edge', version: '133.0.3065.82' },
+    ];
+    const uaData = {
+      brands: uaDataBrands,
+      mobile: false,
+      platform: 'Windows',
+      getHighEntropyValues: (hints) => Promise.resolve({
+        architecture: 'x86',
+        bitness: '64',
+        brands: uaDataBrands,
+        fullVersionList,
+        mobile: false,
+        model: '',
+        platform: 'Windows',
+        platformVersion: '15.0.0',
+        uaFullVersion: '133.0.3065.82',
+        wow64: false,
+      }),
+      toJSON: () => ({ brands: uaDataBrands, mobile: false, platform: 'Windows' }),
+    };
+    Object.defineProperty(Navigator.prototype, 'userAgentData', {
+      get: () => uaData,
+      configurable: true,
+    });
+  } catch (_) {}
+
+  // 9. navigator.vendor — Edge/Chrome both return "Google Inc."
+  try {
+    Object.defineProperty(Navigator.prototype, 'vendor', {
+      get: () => 'Google Inc.',
+      configurable: true,
+    });
+  } catch (_) {}
 })();

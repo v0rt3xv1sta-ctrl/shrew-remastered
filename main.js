@@ -6,7 +6,10 @@ let mainWindow;
 // Electron's default UA contains "Electron/x.y.z" which trips Google's
 // "this browser may not be secure" block on signin. Setting it here
 // (before app.ready) ensures it's applied to every request/session.
-const CHROME_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36';
+// Spoof as Microsoft Edge — same Chromium APIs so fingerprint matches,
+// but Google's signin flow treats Edge as a legit 3rd-party browser
+// instead of sniffing it the way it sniffs bare Chrome/Electron.
+const CHROME_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0';
 app.userAgentFallback = CHROME_UA;
 
 // Nuke the "Electron" signature from any command-line hints too.
@@ -53,10 +56,15 @@ function createWindow() {
       headers['User-Agent'] = CHROME_UA;
     }
 
-    // Modern Chrome client hints — Google checks for these.
-    headers['sec-ch-ua'] = '"Chromium";v="133", "Not(A:Brand";v="24", "Google Chrome";v="133"';
+    // Modern Edge client hints — must match the UA string above.
+    headers['sec-ch-ua'] = '"Chromium";v="133", "Not(A:Brand";v="24", "Microsoft Edge";v="133"';
     headers['sec-ch-ua-mobile'] = '?0';
     headers['sec-ch-ua-platform'] = '"Windows"';
+    headers['sec-ch-ua-platform-version'] = '"15.0.0"';
+    headers['sec-ch-ua-full-version'] = '"133.0.3065.82"';
+    headers['sec-ch-ua-arch'] = '"x86"';
+    headers['sec-ch-ua-bitness'] = '"64"';
+    headers['sec-ch-ua-model'] = '""';
 
     // Drop the CORS-busting header tweaks from the original code for
     // auth flows — killing Origin/Referer breaks Google OAuth.
