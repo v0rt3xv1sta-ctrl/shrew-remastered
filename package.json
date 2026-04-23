@@ -26,9 +26,16 @@
     "productName": "Shrew",
     "win": {
       "target": [
-        "nsis"
+        "msi",
+        "portable"
       ],
       "icon": "Untitled.png"
+    },
+    "msi": {
+      "oneClick": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Shrew"
     },
     "files": [
       "**/*",
