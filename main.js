@@ -12,11 +12,15 @@ function createWindow() {
       nodeIntegration: true,
       contextIsolation: false,
       webviewTag: true,
-      webSecurity: false  // Disable CORS
+      webSecurity: false,  // Disable CORS
+      partition: 'persist:shrew'  // Persistent session
     },
     frame: true,
     titleBarStyle: 'default'
   });
+
+  // Set user agent to look like a regular Chrome browser
+  session.defaultSession.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
   // Disable CORS for all requests
   session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
@@ -30,7 +34,7 @@ function createWindow() {
       details.responseHeaders['Access-Control-Allow-Origin'] = ['*'];
       details.responseHeaders['Access-Control-Allow-Headers'] = ['*'];
     }
-    callback({ responseHeaders: details.responseHeaders });
+    callback({ responseHeaders: details.requestHeaders });
   });
 
   mainWindow.loadFile('index.html');

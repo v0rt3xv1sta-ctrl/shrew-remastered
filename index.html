@@ -72,7 +72,15 @@
     <button onclick="navigate()">Go</button>
 </div>
 
-<webview id="browser" src="homepage.html"></webview>
+<webview 
+    id="browser" 
+    src="homepage.html"
+    webpreferences="webSecurity=no,nodeIntegration=no,contextIsolation=yes"
+    useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    allowpopups
+    disablewebsecurity
+    partition="persist:shrew">
+</webview>
 
 <script>
     const webview = document.getElementById('browser');
@@ -83,6 +91,28 @@
     webview.addEventListener('dom-ready', () => {
       isReady = true;
       console.log('Webview ready!');
+      
+      // Inject CSS to ensure proper rendering
+      webview.insertCSS(`
+        * {
+          box-sizing: border-box;
+        }
+        body {
+          margin: 0;
+          padding: 0;
+        }
+      `);
+    });
+
+    // Handle loading errors
+    webview.addEventListener('did-fail-load', (e) => {
+      console.error('Failed to load:', e.validatedURL, e.errorDescription);
+    });
+
+    // Handle certificate errors
+    webview.addEventListener('certificate-error', (e) => {
+      console.log('Certificate error, continuing...');
+      e.preventDefault();
     });
 
     // update url bar when page changes
