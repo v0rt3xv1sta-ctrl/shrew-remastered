@@ -18,11 +18,11 @@
   "author": "mrrat",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^28.0.0",
+    "electron": "^28.3.3",
     "electron-builder": "^26.8.1"
   },
   "build": {
-    "appId": "com.mrrat.shrew",
+    "appId": "com.gravity.shrew",
     "productName": "Shrew",
     "win": {
       "target": [
