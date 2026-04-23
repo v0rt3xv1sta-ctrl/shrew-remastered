@@ -1,13 +1,13 @@
-# 🐀 Rat Hole Browser
+# 🐀 Shrew Browser
 
 A custom Chromium-based browser built with Electron by mrrat and Gravity.
 
-![Rat Hole Logo](rathole-logo.png)
+![Shrew Logo](rathole-logo.png)
 
 ## ✨ Features
 
 ### Core Browser
-- **Custom Homepage** - Rat hole themed with quick links and search
+- **Custom Homepage** - Shrew themed with quick links and search
 - **Smart Search** - DuckDuckGo web scraping with malware blocking
 - **Wikipedia Integration** - Automatic summaries with images
 - **Navigation Controls** - Back, forward, reload buttons
@@ -34,9 +34,9 @@ A custom Chromium-based browser built with Electron by mrrat and Gravity.
 ## 📥 Installation
 
 ### For Users
-1. Download `Rat Hole Setup.exe` from [Releases](https://github.com/mrratcool78/rathole/releases)
+1. Download `Shrew Setup.exe` from [Releases](https://github.com/mrratcool78/rathole/releases)
 2. Run the installer
-3. Launch Rat Hole from your desktop or start menu
+3. Launch Shrew from your desktop or start menu
 
 ### For Developers
 ```bash
@@ -72,7 +72,7 @@ npm run build-win
 
 ### Easter Eggs
 Try searching for these:
-- **"rat"** - Play the Rat Hole Snake game!
+- **"rat"** - Play the Shrew Snake game!
 - **"rcked"** - Special shoutout to rcked.pages.dev
 
 ## 🛡️ Security Features
@@ -112,7 +112,7 @@ rat-hole/
 
 ## 🎨 Customization
 
-Want to modify Rat Hole? Here's where to look:
+Want to modify Shrew? Here's where to look:
 
 - **Colors**: Edit CSS in `homepage.html` and `search.html`
 - **Quick Links**: Modify the link cards in `homepage.html`
@@ -159,6 +159,6 @@ Found a bug? Have a feature request?
 
 ---
 
-**"not all who wander are lost, some are just in the rat hole"** - someone probably
+**"not all who wander are lost, some are just in Shrew"** - someone probably
 
-🐀🕳️ Welcome to the Rat Hole
+🐀🕳️ Welcome to Shrew

@@ -6,7 +6,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 900,
-    title: 'Rat Hole',
+    title: 'Shrew',
     icon: 'rathole-logo.png',  // Use your logo as the icon
     webPreferences: {
       nodeIntegration: true,
